@@ -28,7 +28,7 @@ module.exports = {
             return res.status(400).json({ error: error.details })
         }
 
-        const { id } = req.params
+        const {id} = req.params
 
         const bookmark = await Bookmark.getById(id)
 
@@ -49,7 +49,7 @@ module.exports = {
     },
 
     delete: async (req, res) => {
-        const { id } = req.params
+        const {id} = req.params
         
         const bookmark = await Bookmark.getById(id) 
 
