@@ -41,7 +41,7 @@ module.exports = {
     },
 
     getAll: async () => {
-        return await User.getAll()
+        return await User.findAll()
     },
 
     getById: async (id) => {

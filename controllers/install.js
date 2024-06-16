@@ -9,9 +9,9 @@ module.exports = {
         await sequelize.sync({force: true})
         const users = [
             {
-                name: "first admin",
-                email: "first@admin.com.br",
-                password: "asdasd",
+                name: "admin",
+                email: "admin",
+                password: "admin",
                 admin: true
             },
             {
@@ -111,7 +111,7 @@ module.exports = {
             categories.forEach(async element => await Category.create(element))
             bookmarks.forEach(async element => await Bookmark.create(element))
         } catch (error) {
-            console.error("Unable to connect to the database:", error)
+            console.error("erro ao conectar com o banco:", error)
         }
         res.status(200).json({msg: "instalação feita com sucesso!"})
     },

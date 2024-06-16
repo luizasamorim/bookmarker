@@ -47,11 +47,11 @@ module.exports = {
     },
 
     delete: async (obj) => {
-        await obj.destroy()
+        return await obj.destroy()
     },
 
     getAll: async () => {
-        return await Bookmark.getAll()
+        return await Bookmark.findAll()
     },
 
     getById: async (id) => {
@@ -78,7 +78,7 @@ module.exports = {
         return await Bookmark.findAll({
             where: {
               title: {
-                [Op.iLike]: "%" + title + "%",
+                [Op.like]: `%${title}%`,
               }
             },
         })

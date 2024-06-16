@@ -41,7 +41,7 @@ module.exports = {
     },
 
     getAll: async () => {
-        return await Category.getAll()
+        return await Category.findAll()
     },
 
     getById: async (id) => {
