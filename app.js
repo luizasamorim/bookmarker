@@ -2,6 +2,7 @@ const express = require("express")
 require("dotenv").config()
 
 const userRouter = require("./routes/user")
+const categoryRouter = require("./routes/category")
 const bookmarkRouter = require("./routes/bookmark")
 const installRouter = require("./routes/install")
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use("/install", installRouter)
 app.use("/user", userRouter)
+app.use("/category", categoryRouter)
 app.use("/bookmark", bookmarkRouter)
 
 const port = process.env.PORT || 3000

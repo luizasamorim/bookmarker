@@ -47,7 +47,7 @@ module.exports = {
     },
 
     delete: async (obj) => {
-        return await obj.destroy()
+        await obj.destroy()
     },
 
     getAll: async () => {

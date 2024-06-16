@@ -45,7 +45,8 @@ module.exports = {
         }
 
         await Bookmark.update(id, value)
-        res.status(200).json(bookmark)
+        value.id = id
+        res.status(200).json(value)
     },
 
     delete: async (req, res) => {
@@ -57,9 +58,9 @@ module.exports = {
             return res.status(400).json({ error: "bookmark not found" })
         }
 
-        const response = await Bookmark.delete(bookmark)
+        await Bookmark.delete(bookmark)
 
-        res.status(200).json(response)
+        res.status(200).json(bookmark)
     },
 
     getAll: async (req, res) => {

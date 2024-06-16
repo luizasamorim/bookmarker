@@ -46,5 +46,13 @@ module.exports = {
 
     getById: async (id) => {
         return await Category.findByPk(id)
+    },
+
+    getByUser: async (userId) => {
+        return await Category.findAll({
+            where: {
+              userId: userId,
+            },
+        })
     }
 }

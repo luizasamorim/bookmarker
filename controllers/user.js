@@ -1,6 +1,4 @@
 const User = require("../models/User")
-const Category = require("../models/Category")
-const User = require("../models/User")
 const validator = require("../validators/user")
 
 module.exports = {
@@ -28,15 +26,14 @@ module.exports = {
         }
 
         const {id} = req.params
-
-        const user = await User.getById(id)
-
-        if (!user) {
+        
+        if (!await User.getById(id)) {
             return res.status(400).json({ error: "user not found" })
         }
 
         await User.update(id, value)
-        res.status(200).json(user)
+        value.id = id
+        res.status(200).json(value)
     },
 
     delete: async (req, res) => {
@@ -48,9 +45,9 @@ module.exports = {
             return res.status(400).json({ error: "user not found" })
         }
 
-        const response = await User.delete(user)
+        await User.delete(user)
 
-        res.status(200).json(response)
+        res.status(200).json(user)
     },
 
     getAll: async (req, res) => {
