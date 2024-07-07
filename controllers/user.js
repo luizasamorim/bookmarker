@@ -1,6 +1,13 @@
 const User = require("../models/User")
 const userValidator = require("../validators/user")
 const adminValidator = require("../validators/admin")
+const queryValidator = require("../validators/query")
+
+const pagination = async (value) => {
+    let limit = value.limit
+    let offset = (value.page -1) * limit
+    return { limit, offset }
+}
 
 const verifyAdmin = (req) => {
     if (req.user.admin) {
@@ -95,7 +102,14 @@ module.exports = {
     },
 
     getAll: async (req, res) => {
-        res.status(200).json(await User.getAll())
+        const { error, value } = queryValidator.validate(req.query)
+        if (error) {
+            return res.status(400).json({ error: error.details })
+        }
+
+        const { limit, offset } = await pagination(value)
+        
+        res.status(200).json(await User.getAll(limit, offset))
     },
 
     getById: async (req, res) => {

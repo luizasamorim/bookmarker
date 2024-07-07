@@ -40,8 +40,8 @@ module.exports = {
         await obj.destroy()
     },
 
-    getAll: async () => {
-        return await User.findAll()
+    getAll: async (limit, offset) => {
+        return await User.findAll({ offset: offset, limit: limit })
     },
 
     getById: async (id) => {

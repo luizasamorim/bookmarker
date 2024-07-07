@@ -2,6 +2,13 @@ const Bookmark = require("../models/Bookmark")
 const Category = require("../models/Category")
 const User = require("../models/User")
 const validator = require("../validators/bookmark")
+const queryValidator = require("../validators/query")
+
+const pagination = async (value) => {
+    let limit = value.limit
+    let offset = (value.page -1) * limit
+    return { limit, offset }
+}
 
 module.exports = {
     create: async (req, res) => {
@@ -64,7 +71,14 @@ module.exports = {
     },
 
     getAll: async (req, res) => {
-        res.status(200).json(await Bookmark.getAll())
+        const { error, value } = queryValidator.validate(req.query)
+        if (error) {
+            return res.status(400).json({ error: error.details })
+        }
+
+        const { limit, offset } = await pagination(value)
+        
+        res.status(200).json(await Bookmark.getAll(limit, offset))
     },
 
     getById: async (req, res) => {
@@ -85,7 +99,14 @@ module.exports = {
             return res.status(400).json({ error: "user not found" })
         }
 
-        res.status(200).json(await Bookmark.getByUser(id))
+        const { error, value } = queryValidator.validate(req.query)
+        if (error) {
+            return res.status(400).json({ error: error.details })
+        }
+
+        const { limit, offset } = await pagination(value)
+
+        res.status(200).json(await Bookmark.getByUser(id, limit, offset))
     },
 
     getByCategory: async (req, res) => {
@@ -95,11 +116,44 @@ module.exports = {
             return res.status(400).json({ error: "category not found" })
         }
 
-        res.status(200).json(await Bookmark.getByCategory(id))
+        const { error, value } = queryValidator.validate(req.query)
+        if (error) {
+            return res.status(400).json({ error: error.details })
+        }
+
+        const { limit, offset } = await pagination(value)
+        
+        res.status(200).json(await Bookmark.getByCategory(id, limit, offset))
     },
 
     getByTitle: async (req, res) => {
         const {title} = req.params
-        res.status(200).json(await Bookmark.getByTitle(title))
+
+        const { error, value } = queryValidator.validate(req.query)
+        if (error) {
+            return res.status(400).json({ error: error.details })
+        }
+
+        const { limit, offset } = await pagination(value)
+        
+        res.status(200).json(await Bookmark.getByTitle(title, limit, offset))
+    },
+    
+    deleteOldest: async (req, res) => {
+        const bookmarks = await Bookmark.getAll()
+
+        let semester = new Date()
+        semester.setMonth(semester.getMonth() - 6)
+
+        let deleted = []
+
+        bookmarks.forEach(async b => {
+            if (b.lastAccess < semester) {
+                deleted.push(b)
+                await Bookmark.delete(b)
+            }
+        })
+
+        res.status(200).json({deletedBookmarks: deleted})
     }
 }

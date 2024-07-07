@@ -7,19 +7,19 @@ Category.belongsTo(User, {
     foreignKey: 'id',
     as: "userId"
   })
-User.hasMany(Category, { as: 'category' })
+User.hasMany(Category, { as: 'category', onDelete: 'CASCADE' })
 
 Bookmark.belongsTo(User, {
   foreignKey: 'id',
   as: "userId"
 })
-User.hasMany(Bookmark, { as: 'bookmark' })
+User.hasMany(Bookmark, { as: 'bookmark', onDelete: 'CASCADE' })
 
 Bookmark.belongsTo(Category, {
     foreignKey: 'id',
     as: "categoryId"
 })
-Category.hasMany(Bookmark, { as: 'bookmark' })
+Category.hasMany(Bookmark, { as: 'bookmark', onDelete: 'CASCADE' })
 
 module.exports = {
   sequelize,

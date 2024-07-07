@@ -1,6 +1,13 @@
 const Category = require("../models/Category")
 const User = require("../models/User")
 const validator = require("../validators/category")
+const queryValidator = require("../validators/query")
+
+const pagination = async (value) => {
+    let limit = value.limit
+    let offset = (value.page -1) * limit
+    return { limit, offset }
+}
 
 module.exports = {
     create: async (req, res) => {
@@ -55,7 +62,14 @@ module.exports = {
     },
 
     getAll: async (req, res) => {
-        res.status(200).json(await Category.getAll())
+        const { error, value } = queryValidator.validate(req.query)
+        if (error) {
+            return res.status(400).json({ error: error.details })
+        }
+
+        const { limit, offset } = await pagination(value)
+
+        res.status(200).json(await Category.getAll(limit, offset))
     },
 
     getById: async (req, res) => {
@@ -76,6 +90,13 @@ module.exports = {
             return res.status(400).json({ error: "user not found" })
         }
 
-        res.status(200).json(await Category.getByUser(id))
+        const { error, value } = queryValidator.validate(req.query)
+        if (error) {
+            return res.status(400).json({ error: error.details })
+        }
+
+        const { limit, offset } = await pagination(value)
+
+        res.status(200).json(await Category.getByUser(id, limit, offset))
     }
 }

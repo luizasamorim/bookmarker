@@ -9,7 +9,7 @@ module.exports = {
         await sequelize.sync({force: true})
         const users = [
             {
-                name: "admin",
+                name: "admin@admin.com.br",
                 email: "admin",
                 password: "admin",
                 admin: true

@@ -50,37 +50,43 @@ module.exports = {
         await obj.destroy()
     },
 
-    getAll: async () => {
-        return await Bookmark.findAll()
+    getAll: async (limit, offset) => {
+        return await Bookmark.findAll({ offset: offset, limit: limit })
     },
 
     getById: async (id) => {
         return await Bookmark.findByPk(id)
     },
 
-    getByUser: async (userId) => {
+    getByUser: async (userId, limit, offset) => {
         return await Bookmark.findAll({
             where: {
               userId: userId,
             },
+            offset: offset,
+            limit: limit
         })
     },
 
-    getByCategory: async (categoryId) => {
+    getByCategory: async (categoryId, limit, offset) => {
         return await Bookmark.findAll({
             where: {
               categoryId: categoryId,
             },
+            offset: offset,
+            limit: limit
         })
     },
 
-    getByTitle: async (title) => {
+    getByTitle: async (title, limit, offset) => {
         return await Bookmark.findAll({
             where: {
               title: {
                 [Op.like]: `%${title}%`,
               }
             },
+            offset: offset,
+            limit: limit
         })
     }
 }

@@ -40,19 +40,21 @@ module.exports = {
         await obj.destroy()
     },
 
-    getAll: async () => {
-        return await Category.findAll()
+    getAll: async (limit, offset) => {
+        return await Category.findAll({ offset: offset, limit: limit })
     },
 
     getById: async (id) => {
         return await Category.findByPk(id)
     },
 
-    getByUser: async (userId) => {
+    getByUser: async (userId, limit, offset) => {
         return await Category.findAll({
             where: {
               userId: userId,
             },
+            offset: offset,
+            limit: limit
         })
     }
 }
