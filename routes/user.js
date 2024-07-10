@@ -4,7 +4,7 @@ const auth = require("../helpers/auth")
 
 const controller = require("../controllers/user")
 
-router.post("/", controller.create)
+router.post("/", auth.auth, controller.create)
 router.post("/admin/", auth.auth, controller.createAdmin)
 router.put("/:id", auth.auth, controller.update)
 router.delete("/:id", auth.auth, controller.delete)

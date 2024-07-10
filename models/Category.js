@@ -1,5 +1,6 @@
 const {DataTypes} = require("sequelize")
 const sequelize = require("../helpers/bd")
+const {Model:User} = require("./User")
 
 const Category = sequelize.define("category", {
     id: {
@@ -15,14 +16,17 @@ const Category = sequelize.define("category", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'users', // table name
-        key: 'id'
-      }
-    }
+    // userId: {
+    //   type: DataTypes.INTEGER,
+    //   references: {
+    //     model: 'users', // table name
+    //     key: 'id',
+    //   }
+    // }
 })
+
+Category.belongsTo(User, { onDelete: "CASCADE"})
+User.hasMany(Category)
 
 module.exports = {
 

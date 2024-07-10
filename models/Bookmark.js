@@ -1,5 +1,6 @@
 const {DataTypes, Op} = require("sequelize")
 const sequelize = require("../helpers/bd")
+const { Model:Category } = require("./Category")
 
 const Bookmark = sequelize.define("bookmark", {
     id: {
@@ -18,21 +19,27 @@ const Bookmark = sequelize.define("bookmark", {
     lastAccess: {
         type: DataTypes.DATE
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'users', // table name
-        key: 'id'
-      }
-    },
-    categoryId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'categories', // table name
-        key: 'id'
-      }
-    }
+    // userId: {
+    //   type: DataTypes.INTEGER,
+    //   references: {
+    //     model: 'users', // table name
+    //     key: 'id'
+    //   }
+    // },
+    // categoryId: {
+    //   type: DataTypes.INTEGER,
+    //   references: {
+    //     model: 'categories', // table name
+    //     key: 'id'
+    //   }
+    // }
 })
+
+Bookmark.belongsTo(Category, { onDelete: "CASCADE"})
+Category.hasMany(Bookmark)
+
+// Category.belongsTo(User, { onDelete: "CASCADE"})
+// User.hasMany(Category)
 
 module.exports = {
 

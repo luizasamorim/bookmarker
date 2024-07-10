@@ -1,8 +1,7 @@
 const sequelize = require("../helpers/bd")
-const Bookmark = require("../models/Bookmark")
 const User = require("../models/User")
 const Category = require("../models/Category")
-
+const Bookmark = require("../models/Bookmark")
 
 module.exports = {
     install: async (req, res) => {
