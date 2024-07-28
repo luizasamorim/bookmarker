@@ -4,7 +4,6 @@ require("dotenv").config()
 module.exports = {
     auth: async (req, res, next) => {
         const bearerToken = req.headers["authorization"]
-        console.log(bearerToken);
 
         if (!bearerToken) return res.status(403).json({ error: "missing token"})
 
