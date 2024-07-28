@@ -15,14 +15,7 @@ const Category = sequelize.define("category", {
     color: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    // userId: {
-    //   type: DataTypes.INTEGER,
-    //   references: {
-    //     model: 'users', // table name
-    //     key: 'id',
-    //   }
-    // }
+    }
 })
 
 Category.belongsTo(User, { onDelete: "CASCADE"})

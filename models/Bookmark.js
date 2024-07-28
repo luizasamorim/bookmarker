@@ -18,28 +18,11 @@ const Bookmark = sequelize.define("bookmark", {
     },
     lastAccess: {
         type: DataTypes.DATE
-    },
-    // userId: {
-    //   type: DataTypes.INTEGER,
-    //   references: {
-    //     model: 'users', // table name
-    //     key: 'id'
-    //   }
-    // },
-    // categoryId: {
-    //   type: DataTypes.INTEGER,
-    //   references: {
-    //     model: 'categories', // table name
-    //     key: 'id'
-    //   }
-    // }
+    }
 })
 
 Bookmark.belongsTo(Category, { onDelete: "CASCADE"})
 Category.hasMany(Bookmark)
-
-// Category.belongsTo(User, { onDelete: "CASCADE"})
-// User.hasMany(Category)
 
 module.exports = {
 
@@ -66,9 +49,19 @@ module.exports = {
     },
 
     getByUser: async (userId, limit, offset) => {
+        const categories = await Category.findAll({
+            where: {
+                userId: userId,
+            },
+            attributes: ['id']
+        })
+
+        const ids = categories.map(e => e.id)
         return await Bookmark.findAll({
             where: {
-              userId: userId,
+                categoryId: {
+                    [Op.in]: ids
+                },
             },
             offset: offset,
             limit: limit
