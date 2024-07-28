@@ -17,11 +17,8 @@ module.exports = {
             return res.status(400).json({ error: error.details })
         }
 
-        if (!await User.getById(value.userId)) {
-            return res.status(400).json({ error: "user not found" })
-        }
-
-        if (!await Category.getById(value.categoryId)) {
+        const category = await Category.getById(value.categoryId)
+        if (!category || category.userId != req.user.id) {
             return res.status(400).json({ error: "category not found" })
         }
 
@@ -43,11 +40,9 @@ module.exports = {
             return res.status(400).json({ error: "bookmark not found" })
         }
 
-        if (!await User.getById(value.userId)) {
-            return res.status(400).json({ error: "user not found" })
-        }
-
-        if (!await Category.getById(value.categoryId)) {
+        const oldCategory = await Category.getById(bookmark.categoryId)
+        const newCategory = await Category.getById(value.categoryId)
+        if (!newCategory || oldCategory.userId != req.user.id || newCategory.userId != req.user.id) {
             return res.status(400).json({ error: "category not found" })
         }
 
@@ -62,6 +57,11 @@ module.exports = {
         const bookmark = await Bookmark.getById(id) 
 
         if (!bookmark) {
+            return res.status(400).json({ error: "bookmark not found" })
+        }
+
+        const category = await Category.getById(bookmark.categoryId)
+        if (!category || category.userId != req.user.id) {
             return res.status(400).json({ error: "bookmark not found" })
         }
 
@@ -127,24 +127,23 @@ module.exports = {
     },
 
     getByTitle: async (req, res) => {
-        const {title} = req.params
-
         const { error, value } = queryValidator.validate(req.query)
         if (error) {
             return res.status(400).json({ error: error.details })
         }
 
         const { limit, offset } = await pagination(value)
+        console.log(value.title);
         
-        res.status(200).json(await Bookmark.getByTitle(title, limit, offset))
+        res.status(200).json(await Bookmark.getByTitle(value.title, limit, offset))
     },
     
     deleteOldest: async (req, res) => {
-        const bookmarks = await Bookmark.getAll()
+        const bookmarks = await Bookmark.getByUser(req.user.id, null, null)
 
         let semester = new Date()
         semester.setMonth(semester.getMonth() - 6)
-
+        
         let deleted = []
 
         bookmarks.forEach(async b => {

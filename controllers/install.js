@@ -8,8 +8,8 @@ module.exports = {
         await sequelize.sync({force: true})
         const users = [
             {
-                name: "admin@admin.com.br",
-                email: "admin",
+                name: "admin",
+                email: "admin@admin.com.br",
                 password: "admin",
                 admin: true
             },
@@ -70,39 +70,34 @@ module.exports = {
             {
                 title: "long doge challenge",
                 link: "https://longdogechallenge.com/",
-                lastAccess: new Date("06-03-2024"),
-                userId: 1,
+                lastAccess: new Date("01-01-2024"),
                 categoryId: 1
             },
             {
                 title: "maze toys",
                 link: "https://maze.toys/mazes/mini/daily/",
-                lastAccess: new Date("06-01-2024"),
-                userId: 1,
+                lastAccess: new Date("01-01-2024"),
                 categoryId: 1
             },
             {
                 title: "pug in a rug",
                 link: "https://puginarug.com/",
                 lastAccess: new Date("06-01-2024"),
-                userId: 1,
-                categoryId: 1
+                categoryId: 2
             },
             {
                 title: "google",
                 link: "https://www.google.com.br/",
                 category: 2,
                 lastAccess: new Date("06-01-2024"),
-                userId: 1,
-                categoryId: 2
+                categoryId: 3
             },
             {
                 title: "maps",
                 link: "https://www.google.com/maps",
                 category: 2,
                 lastAccess: new Date("06-01-2024"),
-                userId: 1,
-                categoryId: 2
+                categoryId: 4
             },
         ]
         try {
@@ -110,12 +105,16 @@ module.exports = {
             categories.forEach(async element => await Category.create(element))
             bookmarks.forEach(async element => await Bookmark.create(element))
         } catch (error) {
-            console.error("erro ao conectar com o banco:", error)
+            res.status(500).json({error: error})
         }
-        res.status(200).json({msg: "instalação feita com sucesso!"})
+        res.status(200).json({msg: "instalação concluída com sucesso!"})
     },
     drop: async (req, res) => {
-        await sequelize.drop()
-        res.status(200).json({status: true})
+        try {
+            await sequelize.drop()
+        } catch (error) {
+            res.status(500).json({error: error})
+        }
+        res.status(200).json({msg: "deleção concluída com sucesso!"})
     }
 }

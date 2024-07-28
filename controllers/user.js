@@ -77,7 +77,7 @@ module.exports = {
         await User.update(id, value)
         value.id = id
         res.status(200).json(value)
-    },
+    }, 
 
     delete: async (req, res) => {
         const admin = verifyAdmin(req)
@@ -92,7 +92,7 @@ module.exports = {
 
         if (!admin && id != req.user.id) {
             return res.status(400).json({ error: "only admins can delete other users" })
-        } else if (user.admin) {
+        } else if (user.admin && id != req.user.id) {
             return res.status(400).json({ error: "admins can't delete other admins" })
         }
 

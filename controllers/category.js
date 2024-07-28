@@ -16,8 +16,13 @@ module.exports = {
             return res.status(400).json({ error: error.details })
         }
 
-        if (!await User.getById(value.userId)) {
+        const user = await User.getById(value.userId)
+        if (!user) {
             return res.status(400).json({ error: "user not found" })
+        }
+
+        if (user.id != req.user.id) {
+            return res.status(400).json({ error: "user informed does not match logged user" })
         }
 
         const category = await Category.create(value)
@@ -38,8 +43,13 @@ module.exports = {
             return res.status(400).json({ error: "category not found" })
         }
 
-        if (!await User.getById(value.userId)) {
+        const user = await User.getById(value.userId)
+        if (!user) {
             return res.status(400).json({ error: "user not found" })
+        }
+        
+        if (user.id != req.user.id) {
+            return res.status(400).json({ error: "user informed does not match logged user" })
         }
 
         await Category.update(id, value)
@@ -53,6 +63,11 @@ module.exports = {
         const category = await Category.getById(id) 
 
         if (!category) {
+            return res.status(400).json({ error: "category not found" })
+        }
+
+        const user = await User.getById(category.userId)
+        if (user.id != req.user.id) {
             return res.status(400).json({ error: "category not found" })
         }
 
