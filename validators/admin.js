@@ -1,11 +1,11 @@
 const Joi = require("joi")
 
-const userValidator = Joi.object({
+const adminValidator = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required()
     .pattern(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z]).*$')), //um número, um símbolo e uma letra maiúscula
-    admin: Joi.boolean().default(false),
+    admin: Joi.boolean().default(true),
 })
   
-module.exports = userValidator
+module.exports = adminValidator
