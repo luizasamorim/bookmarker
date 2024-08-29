@@ -82,4 +82,6 @@ router.get("/:id", auth.auth,  controller.getById /*
     */
 )
 
+router.get("/bookmark/counter", auth.auth,  controller.getCount)
+
 module.exports = router

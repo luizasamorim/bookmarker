@@ -1,5 +1,6 @@
 const Category = require("../models/Category")
 const User = require("../models/User")
+const Bookmark = require("../models/Bookmark")
 const validator = require("../validators/category")
 const queryValidator = require("../validators/query")
 
@@ -113,5 +114,25 @@ module.exports = {
         const { limit, offset } = await pagination(value)
 
         res.status(200).json(await Category.getByUser(id, limit, offset))
+    },
+
+    getCount: async (req, res) => {
+        const bookmarks = await Bookmark.getAll()
+        const categories = await Category.getAll()
+        
+
+        let counter = []
+
+        categories.forEach(category => {
+            let id = category.id
+            
+            let bmOnCat = bookmarks.filter(bookmark => bookmark.categoryId == id)
+            // console.log(bmOnCat.length)
+            counter.push({categoryId: id, name: category.name, bookmarksCount: bmOnCat.length})
+        })
+
+        // console.log(counter)
+
+        res.status(200).json({counter: counter})
     }
 }
