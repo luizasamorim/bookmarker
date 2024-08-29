@@ -18,9 +18,7 @@ app.use("/user", userRouter)
 app.use("/category", categoryRouter)
 app.use("/bookmark", bookmarkRouter)
 app.use("/login", loginRouter)
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerFile)
-  /* #swagger.summary = 'teste' */
-)
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerFile))
 
 const port = process.env.PORT || 3000
 
